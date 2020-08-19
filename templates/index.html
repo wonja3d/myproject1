@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Total AD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        .wrap {
+            width: 1100px;
+            margin: 30px auto;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#tvcfkorea').empty();
+            $('#tvcfglobal').empty();
+            showArticles();
+            // showArticlesGlobal();
+        });
+
+        function showArticles() {
+            $.ajax({
+                type: "GET",
+                url: "/tvcf",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+
+                        let tvcf_korea_infos = response['tvcf_korea_infos'];
+                        let tvcf_global_infos = response['tvcf_global_infos'];
+
+                        for (let i = 0; i < tvcf_korea_infos.length; i++) {
+                            let name = tvcf_korea_infos[i]['title'];
+                            let url = tvcf_korea_infos[i]['url'];
+                            let img_url = tvcf_korea_infos[i]['img_url'];
+                            let date = tvcf_korea_infos[i]['date'];
+                            let type = tvcf_korea_infos[i]['type'];
+                            makeCard(name, url, img_url, date, type);
+                        }
+                         for (let i = 0; i < tvcf_global_infos.length; i++) {
+                            let name = tvcf_global_infos[i]['title'];
+                            let url = tvcf_global_infos[i]['url'];
+                            let img_url = tvcf_global_infos[i]['img_url'];
+                            let date = tvcf_global_infos[i]['date'];
+                            let type = tvcf_global_infos[i]['type'];
+                            makeCardG(name, url, img_url, date, type);
+                        }
+                    }
+                }
+            })
+        }
+
+        // function showArticlesGlobal() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/tvcfg",
+        //         data: {},
+        //         success: function (response) {
+        //             if (response["result"] == "success") {
+        //
+        //                 let tvcf_global_infos = response['tvcf_global_infos'];
+        //                 for (let i = 0; i < tvcf_global_infos.length; i++) {
+        //                     let name = tvcf_global_infos[i]['tvcfg_name'];
+        //                     let url = tvcf_global_infos[i]['tvcfg_url'];
+        //                     let img_url = tvcf_global_infos[i]['tvcfg_img_url'];
+        //                     let date = tvcf_global_infos[i]['tvcfg_date'];
+        //                     let type = "Global";
+        //                     makeCardG(name, url, img_url, date, type);
+        //                 }
+        //             }
+        //         }
+        //     })
+        // }
+
+        function makeCard(name, url, img_url, date, type) {
+            let tempHtml = `<div class="col mb-4">
+                                <div class="card h-100"><img
+                                        src="${img_url}" class="card-img-top"
+                                        alt="...">
+                                    <div class="card-body">
+                                        <a href="${url}"><h5 class="card-title">${name}</h5></a>
+                                        <p class="card-text">${type}</p>
+                                        <p class="card-text">${date}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+            $('#tvcfkorea').append(tempHtml);
+        }
+        function makeCardG(name, url, img_url, date, type) {
+            let tempHtml = `<div class="col mb-4">
+                                <div class="card h-100"><img
+                                        src="${img_url}" class="card-img-top"
+                                        alt="...">
+                                    <div class="card-body">
+                                        <a href="${url}"><h5 class="card-title">${name}</h5></a>
+                                        <p class="card-text">${type}</p>
+                                        <p class="card-text">${date}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+            $('#tvcfglobal').append(tempHtml);
+        }
+    </script>
+
+</head>
+<body>
+<div class="wrap">
+    <div id="tvcf">
+        <h1>TVCF</h1>
+        <h3>국내</h3>
+        <div id="tvcfkorea" class="row row-cols-1 row-cols-md-3">
+            <div class="col mb-4">
+                <div class="card h-100"><img
+                        src="https://imgmedia.tvcf.co.kr/Media/Print/0000415/A0004154083CD1.jpg" class="card-img-top"
+                        alt="...">
+                    <div class="card-body">
+                        <a href="#"><h5 class="card-title">캐롯손해보험 퍼마일 자동차보험</h5></a>
+                        <p class="card-text">인터넷</p>
+                        <p class="card-text">2020-08-18</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>해외</h3>
+        <div id="tvcfglobal" class="row row-cols-1 row-cols-md-3">
+            <div class="col mb-4">
+                <div class="card h-100"><img
+                        src="https://imgmedia.tvcf.co.kr/Media/Print/0000415/A0004154083CD1.jpg" class="card-img-top"
+                        alt="...">
+                    <div class="card-body">
+                        <a href="#"><h5 class="card-title">캐롯손해보험 퍼마일 자동차보험</h5></a>
+                        <p class="card-text">인터넷</p>
+                        <p class="card-text">2020-08-18</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
