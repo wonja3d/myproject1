@@ -62,28 +62,6 @@
             })
         }
 
-        // function showArticlesGlobal() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/tvcfg",
-        //         data: {},
-        //         success: function (response) {
-        //             if (response["result"] == "success") {
-        //
-        //                 let tvcf_global_infos = response['tvcf_global_infos'];
-        //                 for (let i = 0; i < tvcf_global_infos.length; i++) {
-        //                     let name = tvcf_global_infos[i]['tvcfg_name'];
-        //                     let url = tvcf_global_infos[i]['tvcfg_url'];
-        //                     let img_url = tvcf_global_infos[i]['tvcfg_img_url'];
-        //                     let date = tvcf_global_infos[i]['tvcfg_date'];
-        //                     let type = "Global";
-        //                     makeCardG(name, url, img_url, date, type);
-        //                 }
-        //             }
-        //         }
-        //     })
-        // }
-
         function makeCard(name, url, img_url, date, type) {
             let tempHtml = `<div class="col mb-4">
                                 <div class="card h-100"><img
