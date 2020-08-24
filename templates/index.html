@@ -64,9 +64,9 @@
 
         function makeCard(name, url, img_url, date, type) {
             let tempHtml = `<div class="col mb-4">
-                                <div class="card h-100"><img
+                                <div class="card h-100"><a href="${url}"><img
                                         src="${img_url}" class="card-img-top"
-                                        alt="...">
+                                        alt="..."></a>
                                     <div class="card-body">
                                         <a href="${url}"><h5 class="card-title">${name}</h5></a>
                                         <p class="card-text">${type}</p>
@@ -78,9 +78,9 @@
         }
         function makeCardG(name, url, img_url, date, type) {
             let tempHtml = `<div class="col mb-4">
-                                <div class="card h-100"><img
+                                <div class="card h-100"><a href="${url}"><img
                                         src="${img_url}" class="card-img-top"
-                                        alt="...">
+                                        alt="..."></a>
                                     <div class="card-body">
                                         <a href="${url}"><h5 class="card-title">${name}</h5></a>
                                         <p class="card-text">${type}</p>
