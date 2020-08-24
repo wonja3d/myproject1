@@ -11,12 +11,30 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+@app.route('/scrap')
+def scrap():
+    return render_template('scrap.html')
+
+
 
 @app.route('/tvcf', methods=['GET'])
 def read_tvcf():
     tvcf_k_list = list(db.tvcfk.find({},{'_id':False}))
     tvcf_g_list = list(db.tvcfe.find({},{'_id':False}))
     return jsonify({'result': 'success', 'tvcf_korea_infos': tvcf_k_list, 'tvcf_global_infos' : tvcf_g_list})
+
+@app.route('/scrap', methods=['GET'])
+def read_scrap():
+    scrap_list = list(db.scrap.find({},{'_id':False}))
+    return jsonify({'result': 'success', 'scrap_list': scrap_list})
+
+@app.route('/scrap', methods=['POST'])
+def post_scrap():
+    url = request.form.get('url')
+    comment = request.form.get('comment')
+
+    return jsonify({'result': 'success', 'msg': url+comment})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

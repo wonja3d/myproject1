@@ -8,7 +8,6 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.totalad
 
-
 def job():
     print("DB 리셋 실행")
 
@@ -23,7 +22,6 @@ def job():
     chrome_options.add_argument('headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('lang=ko_KR')
-
     driver = webdriver.Chrome('/Users/developer/Downloads/chromedriver', chrome_options=chrome_options)
     driver.implicitly_wait(5)
     driver.get('https://tvcf.co.kr/MovieK/List.asp')
@@ -66,6 +64,8 @@ def job():
         soup = BeautifulSoup(html, 'html.parser')
         lis = soup.select('#creative_list > li')
 
+
+
         for li in lis:
             title = li.select_one('label.title').text.strip()
             date = li.select_one('label.date').text.strip()
@@ -103,6 +103,7 @@ def job():
     lis = soup.select('#creative_list > li')
     pages = soup.select_one('#pageNavi > ul > li:nth-child(1)').text.split('/')[1].strip()
 
+
     if int(pages) == 1:
         read_tvcfE()
     else:
@@ -115,15 +116,17 @@ def job():
                 driver.find_element_by_css_selector('#pageNavi > ul > li:nth-child({}) > a'.format(page_num)).click()
 
     print("DB 업데이트 완료")
+    print("| [time] ",str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min))
 
     driver.quit()
-
 
 sched = BackgroundScheduler()
 sched.start()
 
-sched.add_job(job, 'cron', minute="34", second='10')
+# sched.add_job(job, 'cron', minute='*/3', id="test_1")
+# sched.add_job(job, 'cron', minute="09", second='20')
 
 while True:
     print("Running init DB process...............")
-    time.sleep(10)
+    job()
+    time.sleep(60)
