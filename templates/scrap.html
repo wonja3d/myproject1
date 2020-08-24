@@ -4,8 +4,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+              integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
               crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
@@ -38,7 +38,7 @@
         </style>
         <script>
             $(document).ready(function () {
-                // $("#cards-box").html("");
+                $("#cards-box").html("");
                 showArticles();
             });
 
@@ -80,31 +80,49 @@
             function showArticles() {
                 $.ajax({
                     type: "GET",
-                    url: "/scrap",
+                    url: "/scrapread",
                     data: {},
                     success: function (response) {
-                        let articles = response["scrap_list"];
-                        console.log(articles);
-                        for (let i = 0; i < articles.length; i++) {
-                            makeCard(articles[i]["image"], articles[i]["url"], articles[i]["title"], articles[i]["date"], articles[i]["comment"]);
+                        if (response["result"] == "success") {
+                            let articles = response["scrap_list"];
+                            for (let i = 0; i < articles.length; i++) {
+                                makeCard(articles[i]["title"], articles[i]["date"], articles[i]["type"], articles[i]["url"], articles[i]["img_url"], articles[i]["comment"]);
+                            }
                         }
                     }
                 })
             }
 
-            function makeCard(image, url, title, date, comment) {
-                let tempHtml = `<div class="card">
-                                    <img class="card-img-top"
-                                         src="${image}"
-                                         alt="Card image cap">
+            function makeCard(title, date, type, url, img_url, comment) {
+                let tempHtml = `<div class="col mb-4">
+                                <div class="card h-100"><a href="${url}"><img
+                                        src="${img_url}" class="card-img-top"
+                                        alt="..."></a>
                                     <div class="card-body">
-                                        <a href="${url}" class="card-title">${title}</a>
+                                        <a href="${url}"><h5 class="card-title">${title}</h5></a>
+                                        <p class="card-text">${type}</p>
                                         <p class="card-text">${date}</p>
                                         <p class="card-text comment">${comment}</p>
+                                        <p onclick="deleteBtn('${url}')">-</p>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>`;
                 $("#cards-box").append(tempHtml);
 
+            }
+
+            function deleteBtn(url) {
+                $.ajax({
+                    type: "POST",
+                    url: "/delscrap",
+                    data: {'url': url},
+                    success: function (response) {
+                        if (response["result"] == "success") {
+                            alert(response['msg'])
+                            window.location.reload();
+                        }
+                    }
+                })
             }
         </script>
 
@@ -135,7 +153,8 @@
             </div>
             <!--            <div id="post-box" class="form-post" style="display:none">-->
 
-            <div id="cards-box" class="card-columns">
+            <!--            <div id="cards-box" class="card-columns">-->
+            <div id="cards-box" class="row row-cols-1 row-cols-md-3">
                 <div class="card">
                     <img class="card-img-top"
                          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
