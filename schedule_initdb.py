@@ -5,6 +5,12 @@ import datetime
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
+# from pyvirtualdisplay import Display
+
+
+
+
+# client = MongoClient('mongodb://test:test@localhost', 27017)
 client = MongoClient('localhost', 27017)
 db = client.totalad
 
@@ -18,11 +24,20 @@ def job():
     # driver.implicitly_wait(5)
     # driver.get('https://tvcf.co.kr/MovieK/List.asp')
 
+
+    #background
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('lang=ko_KR')
     driver = webdriver.Chrome('/Users/developer/Downloads/chromedriver', chrome_options=chrome_options)
+
+    # #linux server
+    # display = Display(visible=0, size=(1920, 1080))
+    # display.start()
+    # path = '/home/ubuntu/chromedriver'
+    # driver = webdriver.Chrome(path)
+
     driver.implicitly_wait(5)
     driver.get('https://tvcf.co.kr/MovieK/List.asp')
 
@@ -129,4 +144,4 @@ sched.start()
 while True:
     print("Running init DB process...............")
     job()
-    time.sleep(60)
+    time.sleep(600)

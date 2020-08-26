@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
+# client = MongoClient('mongodb://test:test@localhost', 27017)
 client = MongoClient('localhost', 27017)
 db = client.totalad
 
@@ -37,7 +38,6 @@ def del_scrap():
         db.scrap.delete_one({"url":url})
         msg = '삭제가 되었습니다.'
     else:
-        db.scrap.insert_one(scrap_data)
         msg = 'DB에 없음'
 
 

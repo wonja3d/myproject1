@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <style>
+            .flex-container {
+                width: 100%;
+                -webkit-display: flex;
+                display: flex;
+                padding-bottom: 20px;
+                border: 1px dotted #F60;
+            }
+
+            .flex-items {
+                height: 40px;
+                width: 100px;
+                background-color: #999;
+                border: 1px solid #FFF;
+            }
+
+            .space-between {
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+            }
+            .center {
+                -webkit-align-items: center;
+                align-items: center;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="flex-container space-between center">
+            <div class="flex-items space-between center">INPUT</div>
+<!--            <div class="flex-items space-between">B</div>-->
+<!--            <div class="flex-items space-between">C</div>-->
+            <div class="flex-items space-between center">+</div>
+        </div>
+
+    </body>
+</html>
