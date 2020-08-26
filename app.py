@@ -1,8 +1,8 @@
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
-# client = MongoClient('mongodb://test:test@localhost', 27017)
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@52.78.46.117', 27017)
+# client = MongoClient('localhost', 27017)
 db = client.totalad
 
 app = Flask(__name__)

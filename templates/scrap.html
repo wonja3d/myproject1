@@ -35,6 +35,20 @@
                 /*border: black solid;*/
                 /*border-radius: 5px;*/
             }
+
+            .flex-container {
+                width: 100%;
+                -webkit-display: flex;
+                display: flex;
+                /*padding-bottom: 20px;*/
+                /*border: 1px dotted #F60;*/
+            }
+
+            .space-between {
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+            }
+
         </style>
         <script>
             $(document).ready(function () {
@@ -101,9 +115,11 @@
                                     <div class="card-body">
                                         <a href="${url}"><h5 class="card-title">${title}</h5></a>
                                         <p class="card-text">${type}</p>
-                                        <p class="card-text">${date}</p>
-                                        <p class="card-text comment">${comment}</p>
-                                        <p onclick="deleteBtn('${url}')">-</p>
+                                        <div class="flex-container space-between">
+                                            <p class="card-text">${date}</p>
+                                            <p class="space-between" onclick="deleteBtn('${url}')">-</p>
+                                        </div>
+                                            <p class="card-text comment">${comment}</p>
                                     </div>
                                 </div>
                             </div>`;

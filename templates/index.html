@@ -86,8 +86,8 @@
                                         <a href="${url}"><h5 class="card-title">${name}</h5></a>
                                         <p class="card-text">${type}</p>
                                         <div class="flex-container space-between">
-                                        <p class="card-text space-between">${date}</p>
-                                        <p class="space-between" onclick="scrapBtn('${url}','kr')">+</p>
+                                            <p class="card-text space-between">${date}</p>
+                                            <p class="space-between" onclick="scrapBtn('${url}','kr')">+</p>
                                         </div>
                                     </div>
                                 </div>
@@ -103,8 +103,10 @@
                                     <div class="card-body">
                                         <a href="${url}"><h5 class="card-title">${name}</h5></a>
                                         <p class="card-text">${type}</p>
-                                        <p class="card-text">${date}</p>
-                                        <p onclick="scrapBtn('${url}','global')">+</p>
+                                        <div class="flex-container space-between">
+                                            <p class="card-text">${date}</p>
+                                            <p class="space-between" onclick="scrapBtn('${url}','global')">+</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>`;
