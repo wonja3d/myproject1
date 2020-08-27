@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
+import math
 
 client = MongoClient('mongodb://test:test@52.78.46.117', 27017)
 # client = MongoClient('localhost', 27017)
@@ -15,7 +16,7 @@ def home():
 
 @app.route('/scrap')
 def scrap():
-    return render_template('scrap.html')
+    return render_template('scrapAD.html')
 
 
 @app.route('/tvcf', methods=['GET'])
@@ -28,8 +29,11 @@ def read_tvcf():
 
 @app.route('/scrapread', methods=['GET'])
 def read_scrap():
+    # c_page = request.args.get('page')
     scrap_list = list(db.scrap.find({}, {'_id': False}))
-    return jsonify({'result': 'success', 'scrap_list': scrap_list, 'msg' : "get ok"})
+    db_count = len(scrap_list)
+    page_num = math.ceil(db_count / 12)
+    return jsonify({'result': 'success', 'scrap_list': scrap_list, 'db_count' : db_count, 'page': page_num})
 
 @app.route('/delscrap', methods=['POST'])
 def del_scrap():
@@ -56,12 +60,15 @@ def post_scrap():
     else:
         scrap_find = db.tvcfe.find_one({"url": url})
 
+    db_num = db.scrap.count()+1
+
     scrap_data = {'title': scrap_find['title'],
                   'date': scrap_find['date'],
                   'type': scrap_find['type'],
                   'url': scrap_find['url'],
                   'img_url': scrap_find['img_url'],
-                  'comment' : comment
+                  'comment' : comment,
+                  'db_num' : db_num
                   }
     if (db.scrap.find_one({"url":url})) is not None:
         msg = '이미 스크랩이 되어있습니다.'

@@ -1,0 +1,231 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Total AD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+
+
+        .wrap {
+            width: 1100px;
+            margin: 30px auto;
+        }
+
+        .comment {
+            color: blue;
+            font-weight: bold;
+        }
+
+        #post-box {
+            /*width: 500px;*/
+            /*margin: auto;*/
+            /*padding: 50px;*/
+            /*border: black solid;*/
+            /*border-radius: 5px;*/
+        }
+
+        .flex-container {
+            width: 100%;
+            -webkit-display: flex;
+            display: flex;
+            /*padding-bottom: 20px;*/
+            /*border: 1px dotted #F60;*/
+        }
+
+        .space-between {
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+        }
+
+
+    </style>
+    <script>
+        let cPage = 1;
+        let endPage;
+
+        $(document).ready(function () {
+            $("#cards-box").html("");
+            $("#page").html("");
+            showArticles();
+        });
+        function showArticles() {
+            $.ajax({
+                type: "GET",
+                url: "/scrapread",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        console.log("DB 개수 : "+ response['db_count']);
+                        console.log("전체 page : " + response['page']);
+                        let articles = response["scrap_list"].reverse();
+                        endPage = response['page'];
+
+                        console.log("현재 page : " + cPage);
+
+                        let from = (cPage-1) * 12;
+                        let to = cPage * 12 -1 ;
+                        console.log("from : " + from);
+
+                        if (cPage == endPage) {
+                            console.log("to : " + articles.length);
+                            for (let i = from; i < articles.length; i++) {
+                            makeCard(articles[i]["title"], articles[i]["date"], articles[i]["type"], articles[i]["url"], articles[i]["img_url"], articles[i]["comment"]);
+                            }
+                            makePage(endPage);
+                        } else {
+                            console.log("to : " + to);
+                            for (let i = from; i <= to; i++) {
+                                makeCard(articles[i]["title"], articles[i]["date"], articles[i]["type"], articles[i]["url"], articles[i]["img_url"], articles[i]["comment"]);
+                            }
+                            makePage(endPage);
+                        }
+
+                    }
+                }
+            })
+        }
+        function makeCard(title, date, type, url, img_url, comment) {
+            let tempHtml = `<div class="col mb-4">
+                                <div class="card h-100"><a href="${url}"><img
+                                        src="${img_url}" class="card-img-top"
+                                        alt="..."></a>
+                                    <div class="card-body">
+                                        <a href="${url}"><h5 class="card-title">${title}</h5></a>
+                                        <p class="card-text">${type}</p>
+                                        <div class="flex-container space-between">
+                                            <p class="card-text">${date}</p>
+                                            <p class="space-between" onclick="deleteBtn('${url}')">-</p>
+                                        </div>
+                                            <p class="card-text comment">${comment}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+            $("#cards-box").append(tempHtml);
+        }
+        function makePage(pageNum) {
+            if (pageNum == 1) {
+                console.log('1페이지');
+            } else {
+                if (cPage == 1) {
+                    let tempHtml = `<li class="page-item disabled">
+                                    <span class="page-link">Previous</span>
+                                    </li>`
+                    $("#page").append(tempHtml);
+
+                } else {
+                    let tempHtml = `<li class="page-item">
+                                    <span class="page-link" onclick="pClick(${cPage-1})">Previous</span>
+                                    </li>`
+                    $("#page").append(tempHtml);
+                }
+
+                for (i = 1; i <= pageNum; i++) {
+                    makeNum(i);
+                }
+
+                if (cPage == endPage) {
+                    tempHtml = `<li class="page-item disabled">
+                                <a class="page-link">Next</a>
+                                </li>`
+                    $("#page").append(tempHtml);
+                } else {
+                    tempHtml = `<li class="page-item">
+                                <a class="page-link" href="#" onclick="pClick(${cPage+1})">Next</a>
+                                </li>`
+                    $("#page").append(tempHtml);
+                }
+
+            }
+        }
+        function makeNum(pNum) {
+
+            if (cPage == pNum) {
+                let tempHtml = `<li class="page-item active">
+                                    <span class="page-link" onclick="pClick(${pNum})">${pNum}<span class="sr-only">(current)</span></span>
+                                </li>`
+                $("#page").append(tempHtml);
+            } else {
+                let tempHtml = `<li class="page-item">
+                                <a class="page-link" href="#" onclick="pClick(${pNum})">${pNum}</a>
+                                </li>`
+                $("#page").append(tempHtml);
+            }
+
+        }
+        function deleteBtn(url) {
+            $.ajax({
+                type: "POST",
+                url: "/delscrap",
+                data: {'url': url},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response['msg'])
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+        function pClick(pNum) {
+            cPage = pNum;
+            {#alert(pNum);#}
+            $("#cards-box").html("");
+            $("#page").html("");
+            showArticles();
+        }
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <div id="scrapPage">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">스크랩 페이지</h1>
+                <p class="lead">- 버튼을 무르면 스크랩 데이터가 삭제됩니다.</p>
+            </div>
+        </div>
+        <div id="cards-box" class="row row-cols-1 row-cols-md-3">
+
+        </div>
+    </div>
+
+    <div>
+        <nav aria-label="...">
+            <ul id="page" class="pagination">
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+                {#                <div class="pagination" id="page">#}
+                <li class="page-item">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link">2<span class="sr-only">(current)</span></span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                {#                </div>#}
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
