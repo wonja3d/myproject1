@@ -24,6 +24,18 @@ def read_tvcf():
     tvcf_k_list = list(db.tvcfk.find({}, {'_id': 0}))
     tvcf_g_list = list(db.tvcfe.find({}, {'_id': 0}))
 
+    for scrap in tvcf_k_list:
+        if (db.scrap.find_one({"url": scrap['url']})) is not None:
+            scrap['saved'] = "N"
+        else:
+            scrap['saved'] = "Y"
+
+    for scrap in tvcf_g_list:
+        if (db.scrap.find_one({"url": scrap['url']})) is not None:
+            scrap['saved'] = "N"
+        else:
+            scrap['saved'] = "Y"
+
     return jsonify({'result': 'success', 'tvcf_korea_infos': tvcf_k_list, 'tvcf_global_infos': tvcf_g_list})
 
 

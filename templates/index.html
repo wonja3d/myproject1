@@ -61,7 +61,9 @@
                             let img_url = tvcf_korea_infos[i]['img_url'];
                             let date = tvcf_korea_infos[i]['date'];
                             let type = tvcf_korea_infos[i]['type'];
-                            makeCard(name, url, img_url, date, type);
+                            let saved = tvcf_korea_infos[i]['saved'];
+                            console.log(saved)
+                            makeCard(name, url, img_url, date, type, saved);
                         }
                         for (let i = 0; i < tvcf_global_infos.length; i++) {
                             let name = tvcf_global_infos[i]['title'];
@@ -69,15 +71,18 @@
                             let img_url = tvcf_global_infos[i]['img_url'];
                             let date = tvcf_global_infos[i]['date'];
                             let type = tvcf_global_infos[i]['type'];
-                            makeCardG(name, url, img_url, date, type);
+                            let saved = tvcf_global_infos[i]['saved'];
+                            console.log(saved)
+                            makeCardG(name, url, img_url, date, type, saved);
                         }
                     }
                 }
             })
         }
 
-        function makeCard(name, url, img_url, date, type) {
-            let tempHtml = `<div class="col mb-4">
+        function makeCard(name, url, img_url, date, type, saved) {
+            if (saved == "Y") {
+                let tempHtml = `<div class="col mb-4">
                                 <div class="card h-100"><a href="${url}"><img
                                         src="${img_url}" class="card-img-top"
                                         alt="..."></a>
@@ -92,12 +97,33 @@
                                 </div>
                             </div>`;
 
+                $('#tvcfkorea').append(tempHtml);
+
+            } else {
+                let tempHtml = `<div class="col mb-4">
+                                <div class="card h-100"><a href="${url}"><img
+                                        src="${img_url}" class="card-img-top"
+                                        alt="..."></a>
+                                    <div class="card-body">
+                                        <a href="${url}"><h5 class="card-title">${name}</h5></a>
+                                        <p class="card-text">${type}</p>
+                                        <div class="flex-container space-between">
+                                            <p class="card-text space-between">${date}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                $('#tvcfkorea').append(tempHtml);
+            }
+
+
             {# <p class="space-between button" data-toggle="modal" data-target="#exampleModalCenter">+</p>#}
-            $('#tvcfkorea').append(tempHtml);
         }
 
-        function makeCardG(name, url, img_url, date, type) {
-            let tempHtml = `<div class="col mb-4">
+        function makeCardG(name, url, img_url, date, type, saved) {
+            if (saved == "Y") {
+                let tempHtml = `<div class="col mb-4">
                                 <div class="card h-100"><a href="${url}"><img
                                         src="${img_url}" class="card-img-top"
                                         alt="..."></a>
@@ -111,7 +137,23 @@
                                     </div>
                                 </div>
                             </div>`;
-            $('#tvcfglobal').append(tempHtml);
+                $('#tvcfglobal').append(tempHtml);
+            } else {
+                let tempHtml = `<div class="col mb-4">
+                                <div class="card h-100"><a href="${url}"><img
+                                        src="${img_url}" class="card-img-top"
+                                        alt="..."></a>
+                                    <div class="card-body">
+                                        <a href="${url}"><h5 class="card-title">${name}</h5></a>
+                                        <p class="card-text">${type}</p>
+                                        <div class="flex-container space-between">
+                                            <p class="card-text">${date}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                $('#tvcfglobal').append(tempHtml);
+            }
         }
 
         function scrapBtn(url, lang) {
@@ -122,6 +164,7 @@
                 success: function (response) {
                     if (response["result"] == "success") {
                         alert(response['msg'])
+                        window.location.reload();
                     }
                 }
             })
