@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
           crossorigin="anonymous">
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
@@ -17,6 +18,14 @@
             integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    {#    modal 스크립트용#}
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+
 
     <style>
 
@@ -63,6 +72,7 @@
             $("#page").html("");
             showArticles();
         });
+
         function showArticles() {
             $.ajax({
                 type: "GET",
@@ -70,21 +80,21 @@
                 data: {},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        console.log("DB 개수 : "+ response['db_count']);
+                        console.log("DB 개수 : " + response['db_count']);
                         console.log("전체 page : " + response['page']);
                         let articles = response["scrap_list"].reverse();
                         endPage = response['page'];
 
                         console.log("현재 page : " + cPage);
 
-                        let from = (cPage-1) * 12;
-                        let to = cPage * 12 -1 ;
+                        let from = (cPage - 1) * 12;
+                        let to = cPage * 12 - 1;
                         console.log("from : " + from);
 
                         if (cPage == endPage) {
                             console.log("to : " + articles.length);
                             for (let i = from; i < articles.length; i++) {
-                            makeCard(articles[i]["title"], articles[i]["date"], articles[i]["type"], articles[i]["url"], articles[i]["img_url"], articles[i]["comment"]);
+                                makeCard(articles[i]["title"], articles[i]["date"], articles[i]["type"], articles[i]["url"], articles[i]["img_url"], articles[i]["comment"]);
                             }
                             makePage(endPage);
                         } else {
@@ -99,6 +109,7 @@
                 }
             })
         }
+
         function makeCard(title, date, type, url, img_url, comment) {
             let tempHtml = `<div class="col mb-4">
                                 <div class="card h-100"><a href="${url}"><img
@@ -109,14 +120,16 @@
                                         <p class="card-text">${type}</p>
                                         <div class="flex-container space-between">
                                             <p class="card-text">${date}</p>
-                                            <p class="space-between" onclick="deleteBtn('${url}')">-</p>
+                                            <p class="space-between open-modal" data-url="${url}">-</p>
                                         </div>
                                             <p class="card-text comment">${comment}</p>
                                     </div>
                                 </div>
                             </div>`;
             $("#cards-box").append(tempHtml);
+            {#<p class="space-between" onclick="deleteBtn('${url}')">-</p>#}
         }
+
         function makePage(pageNum) {
             if (pageNum == 1) {
                 console.log('1페이지');
@@ -129,7 +142,7 @@
 
                 } else {
                     let tempHtml = `<li class="page-item">
-                                    <span class="page-link" onclick="pClick(${cPage-1})">Previous</span>
+                                    <span class="page-link" onclick="pClick(${cPage - 1})">Previous</span>
                                     </li>`
                     $("#page").append(tempHtml);
                 }
@@ -145,13 +158,14 @@
                     $("#page").append(tempHtml);
                 } else {
                     tempHtml = `<li class="page-item">
-                                <a class="page-link" href="#" onclick="pClick(${cPage+1})">Next</a>
+                                <a class="page-link" href="#" onclick="pClick(${cPage + 1})">Next</a>
                                 </li>`
                     $("#page").append(tempHtml);
                 }
 
             }
         }
+
         function makeNum(pNum) {
 
             if (cPage == pNum) {
@@ -167,6 +181,7 @@
             }
 
         }
+
         function deleteBtn(url) {
             $.ajax({
                 type: "POST",
@@ -174,12 +189,12 @@
                 data: {'url': url},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        alert(response['msg'])
                         window.location.reload();
                     }
                 }
             })
         }
+
         function pClick(pNum) {
             cPage = pNum;
             {#alert(pNum);#}
@@ -187,7 +202,17 @@
             $("#page").html("");
             showArticles();
         }
+
+
+        let url;
+
+        $(document).on("click", ".open-modal", function (e) {
+            url = e.target.dataset.url;
+            $("#modal").modal("show");
+        });
+
     </script>
+
 </head>
 <body>
 <div class="wrap">
@@ -227,5 +252,29 @@
         </nav>
     </div>
 </div>
+
+<!----modal starts here--->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">삭제 하시겠습니까?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteBtn(url)">Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal ends here--->
+
+
 </body>
 </html>

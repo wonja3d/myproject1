@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Bootstrap Example</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+			integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+			integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+			integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+			crossorigin="anonymous"
+		></script>
+		<script>
+            // open-modal 버튼이 클릭 되었을 때 발생하는 이벤트를 가져와서 해당 html에 있는 data-id, data-nation 속성의 값을 가져옴.
+			$(document).on("click", ".open-modal", function (e) {
+				let nation = e.target.dataset.nation;
+				let videoId = e.target.dataset.id;
+				$("#modal-body").html(
+					`nation is ${nation} videoId is ${videoId}`
+				);
+				$("#modal").modal("show");
+			});
+		</script>
+	</head>
+	<body>
+		<!----modal starts here--->
+		<div id="modal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Tutorialsplane Modal Demo</h4>
+					</div>
+					<div class="modal-body" id="modal-body">
+						<p>Here the description starts here........</p>
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-default"
+							data-dismiss="modal"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Modal ends here--->
+
+        <!-- 버튼 만들 때마다 nation과 id를 넣어 줘야 합니다. -->
+		<button
+			type="button"
+			class="btn btn-info btn-lg open-modal"
+			data-nation="korea"
+			data-id="1"
+		>
+			Click Here To Open Modal
+		</button>
+	</body>
+</html>

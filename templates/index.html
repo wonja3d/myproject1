@@ -17,6 +17,13 @@
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    {#    modal 스크립트용#}
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"
+    ></script>
+
     <style>
         .wrap {
             width: 1100px;
@@ -91,14 +98,12 @@
                                         <p class="card-text">${type}</p>
                                         <div class="flex-container space-between">
                                             <p class="card-text space-between">${date}</p>
-                                            <p class="space-between" onclick="scrapBtn('${url}','kr')">+</p>
+                                            <p class="space-between open-modal" data-url="${url}" data-type="kr">+</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>`;
-
                 $('#tvcfkorea').append(tempHtml);
-
             } else {
                 let tempHtml = `<div class="col mb-4">
                                 <div class="card h-100"><a href="${url}"><img
@@ -113,12 +118,10 @@
                                     </div>
                                 </div>
                             </div>`;
-
                 $('#tvcfkorea').append(tempHtml);
             }
 
-
-            {# <p class="space-between button" data-toggle="modal" data-target="#exampleModalCenter">+</p>#}
+                                        {#<p class="space-between" onclick="scrapBtn('${url}','kr')">+</p>#}
         }
 
         function makeCardG(name, url, img_url, date, type, saved) {
@@ -156,20 +159,28 @@
             }
         }
 
-        function scrapBtn(url, lang) {
+        function scrapBtn(url, lang, comment) {
             $.ajax({
                 type: "POST",
                 url: "/scrap",
-                data: {'url': url, 'comment': "준비중", 'lang': lang},
+                data: {'url': url, 'comment': comment , 'lang': lang},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        alert(response['msg'])
+                        {#alert(response['msg'])#}
                         window.location.reload();
                     }
                 }
             })
         }
 
+        let url;
+        let countrytype;
+
+        $(document).on("click", ".open-modal", function (e) {
+            url = e.target.dataset.url;
+            countrytype = e.target.dataset.type;
+            $("#modal").modal("show");
+        });
 
     </script>
 
@@ -212,31 +223,34 @@
 </div>
 
 
-{#<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"#}
-{#     aria-hidden="true">#}
-{#    <div class="modal-dialog modal-dialog-centered" role="document">#}
-{#        <div class="modal-content">#}
-{#            <div class="modal-header">#}
-{#                <h5 class="modal-title" id="exampleModalLongTitle">스크랩을 하시겠습니까?</h5>#}
-{#                <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#                    <span aria-hidden="true">&times;</span>#}
-{#                </button>#}
-{#            </div>#}
-{#            <div class="modal-body">#}
-{#                <div class="input-group">#}
-{#                    <div class="input-group-prepend">#}
-{#                        <span class="input-group-text">Comment</span>#}
-{#                    </div>#}
-{#                    <textarea id="commentbox" class="form-control" aria-label="With textarea"></textarea>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="modal-footer">#}
-{#                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
-{#                <button type="button" class="btn btn-primary">Save</button>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
+<!----modal starts here--->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h8 class="modal-title" id="exampleModalLongTitle">스크랩 하시겠습니까?</h8>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Comment</span>
+                    </div>
+                    <textarea id="commentbox" class="form-control" aria-label="With textarea"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="scrapBtn(url,countrytype,$('#commentbox').val())">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal ends here--->
+
 
 </body>
 </html>
