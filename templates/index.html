@@ -121,7 +121,7 @@
                 $('#tvcfkorea').append(tempHtml);
             }
 
-                                        {#<p class="space-between" onclick="scrapBtn('${url}','kr')">+</p>#}
+            {#<p class="space-between" onclick="scrapBtn('${url}','kr')">+</p>#}
         }
 
         function makeCardG(name, url, img_url, date, type, saved) {
@@ -135,7 +135,7 @@
                                         <p class="card-text">${type}</p>
                                         <div class="flex-container space-between">
                                             <p class="card-text">${date}</p>
-                                            <p class="space-between" onclick="scrapBtn('${url}','global')">+</p>
+                                            <p class="space-between open-modal" data-url="${url}" data-type="global">+</p>
                                         </div>
                                     </div>
                                 </div>
@@ -160,10 +160,11 @@
         }
 
         function scrapBtn(url, lang, comment) {
+
             $.ajax({
                 type: "POST",
                 url: "/scrap",
-                data: {'url': url, 'comment': comment , 'lang': lang},
+                data: {'url': url, 'comment': comment, 'lang': lang},
                 success: function (response) {
                     if (response["result"] == "success") {
                         {#alert(response['msg'])#}
@@ -189,7 +190,11 @@
 <div class="wrap">
     <div id="tvcf">
         <h1>TVCF</h1>
-        <h3>국내</h3>
+        <div class="flex-container space-between">
+            <h3 class="space-between">국내</h3>
+            <a class="space-between" href="scrap">스크랩 페이지</a>
+        </div>
+
         <div id="tvcfkorea" class="row row-cols-1 row-cols-md-3">
             <div class="col mb-4">
                 <div class="card h-100"><img
@@ -244,7 +249,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="scrapBtn(url,countrytype,$('#commentbox').val())">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        onclick="scrapBtn(url,countrytype,$('#commentbox').val())">Save
+                </button>
             </div>
         </div>
     </div>

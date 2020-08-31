@@ -4,7 +4,6 @@ from selenium import webdriver
 import datetime
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-
 from pyvirtualdisplay import Display
 
 
@@ -38,7 +37,7 @@ def job():
     path = '/home/ubuntu/chromedriver'
     driver = webdriver.Chrome(path)
 
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(30)
     driver.get('https://tvcf.co.kr/MovieK/List.asp')
 
     before_day = 3
