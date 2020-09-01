@@ -42,9 +42,9 @@ def job():
         driver.get('https://tvcf.co.kr/MovieK/List.asp')
     except Exception:
         print("로딩중 에러가 발생하였습니다. ")
-        print("| [time] ", str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min))
         driver.quit()
-        job()
+        return
+        # print("| [time] ", str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min))
 
     before_day = 3
     today = datetime.datetime.now()
@@ -112,7 +112,15 @@ def job():
                     page_num += 1
                 driver.find_element_by_css_selector('#pageNavi > ul > li:nth-child({}) > a'.format(page_num)).click()
 
-    driver.get('https://tvcf.co.kr/MovieE/List.asp')
+
+    try:
+        driver.get('https://tvcf.co.kr/MovieE/List.asp')
+    except Exception:
+        print("해외 로딩중 에러가 발생하였습니다. ")
+        driver.quit()
+        return
+        # print("| [time] ", str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min))
+
     driver.find_element_by_name('Date1').send_keys(day_before_3.strftime("%Y-%m-%d"))
     driver.find_element_by_name('Date2').send_keys(today.strftime("%Y-%m-%d"))
     driver.find_element_by_css_selector('#date_select > a').click()
