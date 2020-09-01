@@ -167,8 +167,13 @@
                 data: {'url': url, 'comment': comment, 'lang': lang},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        {#alert(response['msg'])#}
-                        window.location.reload();
+                        if(response['msg']=="코멘트를 입력해주세요."){
+                            alert(response['msg'])
+                        } else {
+                            alert(response['msg'])
+                            window.location.reload();
+                        }
+
                     }
                 }
             })

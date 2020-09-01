@@ -50,11 +50,15 @@ def read_scrap():
 @app.route('/delscrap', methods=['POST'])
 def del_scrap():
     url = request.form.get('url')
-    if (db.scrap.find_one({"url":url})) is not None:
-        db.scrap.delete_one({"url":url})
-        msg = '삭제가 되었습니다.'
+    delPw = request.form.get('delPw')
+    if delPw == "Dlselrh202)":
+        if (db.scrap.find_one({"url":url})) is not None:
+            db.scrap.delete_one({"url":url})
+            msg = '삭제가 되었습니다.'
+        else:
+            msg = 'DB에 없음'
     else:
-        msg = 'DB에 없음'
+        return jsonify({'result': 'success', 'msg' : "비밀번호를 확인해주세요."})
 
 
 
@@ -67,26 +71,30 @@ def post_scrap():
     comment = request.form.get('comment')
     lang = request.form.get('lang')
 
-    if lang == 'kr':
-        scrap_find = db.tvcfk.find_one({"url": url})
-    else:
-        scrap_find = db.tvcfe.find_one({"url": url})
+    if comment != "":
+        if lang == 'kr':
+            scrap_find = db.tvcfk.find_one({"url": url})
+        else:
+            scrap_find = db.tvcfe.find_one({"url": url})
 
-    db_num = db.scrap.count()+1
+        db_num = db.scrap.count()+1
 
-    scrap_data = {'title': scrap_find['title'],
-                  'date': scrap_find['date'],
-                  'type': scrap_find['type'],
-                  'url': scrap_find['url'],
-                  'img_url': scrap_find['img_url'],
-                  'comment' : comment,
-                  'db_num' : db_num
-                  }
-    if (db.scrap.find_one({"url":url})) is not None:
-        msg = '이미 스크랩이 되어있습니다.'
+        scrap_data = {'title': scrap_find['title'],
+                      'date': scrap_find['date'],
+                      'type': scrap_find['type'],
+                      'url': scrap_find['url'],
+                      'img_url': scrap_find['img_url'],
+                      'comment' : comment,
+                      'db_num' : db_num
+                      }
+        if (db.scrap.find_one({"url":url})) is not None:
+            msg = '이미 스크랩이 되어있습니다.'
+        else:
+            db.scrap.insert_one(scrap_data)
+            msg = '스크랩 완료'
     else:
-        db.scrap.insert_one(scrap_data)
-        msg = '스크랩 완료'
+        msg = "코멘트를 입력해주세요."
+
     return jsonify({'result': 'success', 'msg': msg})
 
 if __name__ == '__main__':

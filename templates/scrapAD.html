@@ -182,13 +182,14 @@
 
         }
 
-        function deleteBtn(url) {
+        function deleteBtn(url,delPw) {
             $.ajax({
                 type: "POST",
                 url: "/delscrap",
-                data: {'url': url},
+                data: {'url': url, 'delPw' : delPw},
                 success: function (response) {
                     if (response["result"] == "success") {
+                        alert(response['msg'])
                         window.location.reload();
                     }
                 }
@@ -276,9 +277,16 @@
                 </button>
             </div>
 
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Password</span>
+                </div>
+                <input type="password" id="delPw" class="form-control" aria-describedby="basic-addon1">
+            </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteBtn(url)">Delete
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteBtn(url,$('#delPw').val())">Delete
                 </button>
             </div>
         </div>
