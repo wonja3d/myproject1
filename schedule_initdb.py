@@ -38,7 +38,13 @@ def job():
     driver = webdriver.Chrome(path)
 
     driver.implicitly_wait(30)
-    driver.get('https://tvcf.co.kr/MovieK/List.asp')
+    try:
+        driver.get('https://tvcf.co.kr/MovieK/List.asp')
+    except Exception:
+        print("로딩중 에러가 발생하였습니다. ")
+        print("| [time] ", str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min))
+        driver.quit()
+        job()
 
     before_day = 3
     today = datetime.datetime.now()
