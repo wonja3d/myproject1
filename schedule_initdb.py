@@ -157,4 +157,4 @@ sched.start()
 while True:
     print("Running init DB process...............")
     job()
-    time.sleep(600)
+    time.sleep(60000)
