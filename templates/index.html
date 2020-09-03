@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta property="og:title" content="TOTALAD"/>
+    <meta property="og:description" content="매일매일 광고가 업데이트 되는 페이지"/>
+    <meta property="og:image" content="{{ url_for('static', filename='totalad.jpg') }}"/>
     <title>Total AD</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
@@ -167,7 +170,7 @@
                 data: {'url': url, 'comment': comment, 'lang': lang},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        if(response['msg']=="코멘트를 입력해주세요."){
+                        if (response['msg'] == "코멘트를 입력해주세요.") {
                             alert(response['msg'])
                         } else {
                             alert(response['msg'])
