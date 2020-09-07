@@ -154,7 +154,11 @@ sched.start()
 # sched.add_job(job, 'cron', minute='*/3', id="test_1")
 # sched.add_job(job, 'cron', minute="09", second='20')
 
-while True:
-    print("Running init DB process...............")
-    job()
-    time.sleep(60000)
+print("Running init DB process...............")
+job()
+
+
+# while True:
+#     print("Running init DB process...............")
+#     job()
+#     time.sleep(60000)
